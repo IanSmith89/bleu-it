@@ -87,7 +87,7 @@
               Description must be less than 512 characters
             </span>
           </div>
-          <input type="submit" class="btn btn-default" value="Submit Post" ng-disabled="submissionForm.$invalid" ng-click="submissionForm.$setPristine() && submissionForm.$setUntouched()" />
+          <input type="submit" class="btn btn-default" value="Submit Post" ng-disabled="submissionForm.$invalid" ng-click="submissionForm.$setPristine()" />
         </form>
       </div>
     </div>
@@ -142,17 +142,48 @@
                     <h5>|</h5>
                   </li>
                   <li>
-                    <h5>
-                      <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> {{post.comments}} comments</h5>
+                    <h5 ng-click="post.commentState = !post.commentState">
+                      <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> {{post.comments.length}} comments</h5>
                   </li>
                   <li>
                     <h5>|</h5>
                   </li>
                   <li>
-                    <h5>
+                    <h5 ng-click="post.addComment = !post.addComment">
                       <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Add Comment</h5>
                   </li>
                 </ul>
+              </div>
+              <div class="row" ng-show="post.addComment">
+                <form class="inline-form" name="addCommentForm">
+                  <div class="form-group" ng-class="{'has-success': addCommentForm.author.$valid, 'has-error': addCommentForm.author.$invalid && !addCommentForm.author.$pristine}">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" name="author" id="author" aria-describedby="authorErrors" ng-model="PC.post.comments.author" ng-minlength=3 ng-maxlength=15 required />
+                    <span class="help-block" id="authorErrors" ng-show="addCommentForm.author.$error.minlength">
+                      Username must be at least 3 characters
+                    </span>
+                    <span class="help-block" id="authorErrors" ng-show="addCommentForm.author.$error.maxlength">
+                      Username must be less than 15 characters
+                    </span>
+                  </div>
+                  <div class="form-group" ng-class="{'has-success': addCommentForm.text.$valid, 'has-error': addCommentForm.text.$invalid && !addCommentForm.text.$pristine}">
+                    <label for="text">Text</label>
+                    <input type="text" class="form-control" name="text" id="text" aria-describedby="textErrors" ng-model="PC.post.comments.text" ng-minlength=3 ng-maxlength=63 required />
+                    <span class="help-block" id="textErrors" ng-show="addCommentForm.text.$error.minlength">
+                      Comment must be at least 3 characters
+                    </span>
+                    <span class="help-block" id="textErrors" ng-show="addCommentForm.text.$error.maxlength">
+                      Comment must be less than 63 characters
+                    </span>
+                  </div>
+                </form>
+              </div>
+              <div class="row" ng-show="post.commentState">
+                <div class="col-md-12">
+                  <div ng-repeat="comment in post.comments">
+                    <p><strong>{{comment.author}}</strong> - {{comment.text}}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
