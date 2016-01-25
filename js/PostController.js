@@ -7,6 +7,7 @@ function PostController() {
   var vm = this;
   vm.postList = [];
   vm.submitPost = submitPost;
+  vm.submitComment = submitComment;
 
   vm.submitPost({
     'title': 'Erik Johnson plans to return to Avalanche lineup Friday or Saturday',
@@ -62,9 +63,15 @@ function PostController() {
     post.votes = 0;
     // post.comments = [];
     post.addComment = false;
-    post.commentState = false;
+    post.viewComments = false;
     vm.postList.push(post);
     vm.post = {};
     vm.submission = false;
+  }
+  function submitComment(post, comment) {
+    post.addComment = false;
+    post.viewComments = true;
+    post.comments.push(comment);
+    vm.post.comments = {};
   }
 }

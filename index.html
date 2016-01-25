@@ -6,14 +6,14 @@
   <title>Bleu It</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
-  <div class="container" ng-controller="PostController as PC" ng-cloak>
+  <main class="container" ng-controller="PostController as PC" ng-cloak>
     <div class="row">
-      <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">BLEU-IT</a>
           </div>
@@ -47,8 +47,8 @@
         </div>
       </nav>
     </div>
-    <div class="row" ng-show="PC.submission">
-      <div class="col-md-12">
+    <div class="row submit-form" ng-show="PC.submission">
+      <div class="col-md-offset-2 col-md-8">
         <form name="submissionForm" ng-submit="PC.submitPost(PC.post)" novalidate>
           <div class="form-group" ng-class="{'has-success': submissionForm.title.$valid, 'has-error': submissionForm.title.$invalid && !submissionForm.title.$pristine}">
             <label class="control-label" for="title">Title</label>
@@ -92,38 +92,33 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-offset-1 col-md-10">
         <div ng-repeat="post in PC.postList | orderBy : '-votes'">
-          <div class="row well well-sm">
+          <div class="row well">
             <div class="col-md-3">
               <img class="img-responsive" ng-src="{{post.image_url}}" alt="{{post.title}}" />
+              <ul class="list-inline text-center">
+                <li>
+                  <h4>
+                    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-click="post.votes = post.votes + 1"></span>
+                  </h4>
+                </li>
+                <li>
+                  <h3 ng-class="{'text-success': post.votes > 0, 'text-danger': post.votes < 0}">{{post.votes}}</h3>
+                </li>
+                <li>
+                  <h4>
+                    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-click="post.votes = post.votes - 1"></span>
+                  </h4>
+                </li>
+              </ul>
             </div>
             <div class="col-md-9">
               <div class="row">
-                <ul class="list-inline">
-                  <li>
-                    <h4>{{post.title}}</h4>
-                  </li>
-                  <li>
-                    <h4>|</h4>
-                  </li>
-                  <li>
-                    <h4>
-                      <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" ng-click="post.votes = post.votes + 1"></span>
-                    </h4>
-                  </li>
-                  <li>
-                    <h4>
-                      <span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ng-click="post.votes = post.votes - 1"></span>
-                    </h4>
-                  </li>
-                  <li>
-                    <h4 ng-class="{'text-success': post.votes > 0, 'text-danger': post.votes < 0}">{{post.votes}}</h4>
-                  </li>
-                </ul>
+                <h4>{{post.title}}</h4>
               </div>
               <div class="row">
-                <p class="text-right">
+                <p>
                   By {{post.author}}
                 </p>
               </div>
@@ -142,7 +137,7 @@
                     <h5>|</h5>
                   </li>
                   <li>
-                    <h5 ng-click="post.commentState = !post.commentState">
+                    <h5 ng-click="post.viewComments = !post.viewComments">
                       <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> {{post.comments.length}} comments</h5>
                   </li>
                   <li>
@@ -155,7 +150,7 @@
                 </ul>
               </div>
               <div class="row" ng-show="post.addComment">
-                <form class="inline-form" name="addCommentForm">
+                <form class="inline-form" name="addCommentForm" ng-submit="PC.submitComment(post, PC.post.comments)">
                   <div class="form-group" ng-class="{'has-success': addCommentForm.author.$valid, 'has-error': addCommentForm.author.$invalid && !addCommentForm.author.$pristine}">
                     <label for="author">Author</label>
                     <input type="text" class="form-control" name="author" id="author" aria-describedby="authorErrors" ng-model="PC.post.comments.author" ng-minlength=3 ng-maxlength=15 required />
@@ -176,9 +171,10 @@
                       Comment must be less than 63 characters
                     </span>
                   </div>
+                  <input type="submit" class="btn btn-default" value="Submit Comment" ng-disabled="addCommentForm.$invalid" ng-click="addCommentForm.$setPristine()" />
                 </form>
               </div>
-              <div class="row" ng-show="post.commentState">
+              <div class="row" ng-show="post.viewComments">
                 <div class="col-md-12">
                   <div ng-repeat="comment in post.comments">
                     <p><strong>{{comment.author}}</strong> - {{comment.text}}</p>
@@ -190,13 +186,13 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
-  <script src="app.js"></script>
-  <script src="PostController.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/PostController.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,38 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.submit-form {
+  margin-bottom: 35px;
+}
+
+main {
+  background: #fdfdfd;
+  padding: 70px 0;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+}
+
+body {
+  /* fallback */
+  background-color: #fff;
+  background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ededed), to(#fdfdfd));
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(top, #ededed, #fdfdfd);
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(top, #ededed, #fdfdfd);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(top, #ededed, #fdfdfd);
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(top, #ededed, #fdfdfd);
+}
